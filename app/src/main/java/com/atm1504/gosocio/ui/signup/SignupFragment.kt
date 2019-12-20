@@ -1,4 +1,4 @@
-package com.atm1504.gosocio.ui.slideshow
+package com.atm1504.gosocio.ui.signup
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
 
-class SlideshowFragment : Fragment() {
+class SignupFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
+    private lateinit var signupViewModel: SignupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        slideshowViewModel =
-            ViewModelProviders.of(this).get(SlideshowViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
+        signupViewModel =
+            ViewModelProviders.of(this).get(SignupViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_signup, container, false)
         val textView: TextView = root.findViewById(R.id.text_slideshow)
-        slideshowViewModel.text.observe(this, Observer {
+        signupViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root

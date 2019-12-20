@@ -1,13 +1,13 @@
-package com.atm1504.gosocio.ui.slideshow
+package com.atm1504.gosocio.ui.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SlideshowViewModel : ViewModel() {
+class SignupViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is slideshow Fragment"
+        value = "This is signup Fragment"
     }
     val text: LiveData<String> = _text
 }

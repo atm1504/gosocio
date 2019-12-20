@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_login" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.atm1504.gosocio.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_submit_report"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_signup"
+        android:name="com.atm1504.gosocio.ui.signup.SignupFragment"
+        android:label="@string/menu_signup"
+        tools:layout="@layout/fragment_signup" />
 
     <fragment
         android:id="@+id/nav_tools"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/nav_share"
         android:name="com.atm1504.gosocio.ui.share.ShareFragment"
-        android:label="@string/menu_report"
+        android:label="@string/menu_submit_report"
         tools:layout="@layout/fragment_share" />
 
     <fragment
