@@ -152,6 +152,7 @@
             android:layout_centerInParent="true"
             android:background="#0058b2"
             android:padding="10dp"
+            android:id="@+id/signupButton"
             android:text="Signup"
             android:textColor="#fff"
             android:textSize="20dp" />
