@@ -22,5 +22,6 @@
     <string name="aadhar">Enter your 13 aadhar number</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="email_input">Email</string>
 
 </resources>
