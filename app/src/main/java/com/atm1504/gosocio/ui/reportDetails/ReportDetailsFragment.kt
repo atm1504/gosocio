@@ -54,7 +54,7 @@ class ReportDetailsFragment : Fragment() {
                 call: Call<ReportResponse>,
                 response: Response<ReportResponse>
             ) {
-                Log.d("KHANKI","Fetched")
+                Log.d("KHANKI","Fetched complain")
             }
 
         })
