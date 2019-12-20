@@ -22,10 +22,10 @@ class SignupFragment : Fragment() {
         signupViewModel =
             ViewModelProviders.of(this).get(SignupViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_signup, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        signupViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
+//        val textView: TextView = root.findViewById(R.id.text_slideshow)
+//        signupViewModel.text.observe(this, Observer {
+//            textView.text = it
+//        })
         return root
     }
 }
