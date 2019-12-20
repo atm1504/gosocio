@@ -44,7 +44,7 @@ class SubmittedReportsAdapter : RecyclerView.Adapter<SubmittedReportsAdapter.Vie
             val bundle = bundleOf(
                 "id" to reportsList.get(position).id
             )
-//            holder.itemView.findNavController().navigate(R.id.nav_report, bundle)
+            holder.itemView.findNavController().navigate(R.id.nav_report_details, bundle)
             Log.d("KHANKI","Id is " + reportsList.get(position).id)
         }
 
