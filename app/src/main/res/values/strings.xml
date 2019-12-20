@@ -13,4 +13,14 @@
     <string name="menu_profile">Profile</string>
     <string name="menu_check_status">Check Status</string>
     <string name="menu_about">About</string>
+    <string name="menu_signup">Sign Up</string>
+
+    <!-- Signup fragment-->
+    <string name="name">Enter your name</string>
+    <string name="email">Enter your email</string>
+    <string name="phone">Enter your phone</string>
+    <string name="aadhar">Enter your 13 aadhar number</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
 </resources>
