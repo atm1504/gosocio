@@ -9,8 +9,8 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_login">Login</string>
-    <string name="menu_logout">Logout</string>
+    <string name="menu_submit_report">Submit Report</string>
     <string name="menu_profile">Profile</string>
-    <string name="menu_report">Report</string>
     <string name="menu_check_status">Check Status</string>
+    <string name="menu_about">About</string>
 </resources>
