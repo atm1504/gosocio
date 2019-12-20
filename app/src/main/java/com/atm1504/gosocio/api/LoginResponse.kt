@@ -6,10 +6,10 @@ import androidx.annotation.Keep
 data class LoginResponse(
     private val status: Int = 0,
     private val access_token: String = "",
-    private val permit: String = "",
-    private val position: String = "",
     private val email: String = "",
-    private val message: List<String>
+    private val name: String = "",
+    private val phone: String = "",
+    private val coins: Number = 0
 ) {
     fun status(): Int {
         return status
@@ -19,16 +19,20 @@ data class LoginResponse(
         return access_token
     }
 
-    fun permit(): String {
-        return permit
-    }
-
-    fun position(): String {
-        return position
-    }
 
     fun email(): String {
         return email
     }
 
+    fun name(): String {
+        return name
+    }
+
+    fun phone(): String {
+        return phone
+    }
+
+    fun coins(): Number {
+        return coins
+    }
 }
