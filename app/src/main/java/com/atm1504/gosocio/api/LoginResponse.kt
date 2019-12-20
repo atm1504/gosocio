@@ -19,7 +19,6 @@ data class LoginResponse(
         return access_token
     }
 
-
     fun email(): String {
         return email
     }
