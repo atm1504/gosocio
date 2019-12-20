@@ -23,12 +23,17 @@ interface RetrofitApi {
         ) phone: RequestBody, @Part("confirm_password") confirm_password: RequestBody, @Part("aadfhar") aadhar: RequestBody
     ): Call<SignupResponse>
 
+    @Multipart
+    @POST("reports.json")
+    fun getReportedTasks(
+        @Part("email") email: RequestBody, @Part("access_token") access_token: RequestBody
+    ): Call<ReportedTasksResponse>
 
     companion object Factory {
         fun create(): RetrofitApi {
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://celesta.org.in/backend/admin/functions/app/")
+                .baseUrl("https://atm1504.in/json/")
                 .build()
 
             return retrofit.create(RetrofitApi::class.java)
