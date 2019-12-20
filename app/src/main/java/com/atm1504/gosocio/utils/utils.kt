@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 
 object utils {
     fun isNetworkConnected(context: Context?): Boolean {
@@ -26,5 +27,9 @@ object utils {
             context?.getSystemService(Context.INPUT_METHOD_SERVICE)
                     as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_FORCED)
+    }
+
+    fun showToast(context: Context?, message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }
