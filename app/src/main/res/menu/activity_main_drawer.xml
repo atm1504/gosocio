@@ -24,16 +24,10 @@
             android:id="@+id/nav_reports_submitted"
             android:icon="@drawable/ic_menu_send"
             android:title="@string/menu_reports_submitted" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/menu_submit_report" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_submit_report" />
-
-        </menu>
-    </item>
 
 </menu>
