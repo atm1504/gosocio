@@ -44,8 +44,8 @@ class HomeFragment : Fragment() {
         editor.putInt("stick3",0)
         editor.putInt("stick4",7)
         editor.putInt("stick5",9)
+        editor.putBoolean("loggedIn",true)
         editor.commit()
-
 
     }
 }
