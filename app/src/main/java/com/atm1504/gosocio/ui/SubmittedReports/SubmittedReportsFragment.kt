@@ -67,7 +67,6 @@ class SubmittedReportsFragment : Fragment() {
         val retrofitApi = RetrofitApi.create()
         val sharedPref: SharedPreferences =
             requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val retofitApi = RetrofitApi.create()
         val email = RequestBody.create(
             MediaType.parse("text/plain"),
             sharedPref.getString("email", "me@atm1504.in ")

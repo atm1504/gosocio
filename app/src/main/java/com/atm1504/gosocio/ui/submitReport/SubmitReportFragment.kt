@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.Color.*
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -19,6 +21,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
@@ -73,6 +76,14 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         progressDialog = ProgressDialog(context)
         progressDialog?.setCancelable(false)
         locationHelper = LocationHelper(requireContext())
+        submit_report.setBackgroundColor(
+            ContextCompat.getColor(
+                this.requireContext(),
+                R.color.grey
+            )
+        )
+        submit_report.isEnabled = false
+        show_loaded_image.visibility=View.GONE
 
         // Taking permissions
         if (!checkPermissions()) {
@@ -84,8 +95,12 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         getLocation()
 
-        submit_report.setOnClickListener {
+        take_photo.setOnClickListener {
             reportReport()
+        }
+
+        submit_report.setOnClickListener {
+            addReport()
         }
 
     }
@@ -116,7 +131,6 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     // Load the spinner
     fun loadSpinner() {
-        utils.showToast(context, "Worked - " + roads.toString())
         spinner = this.road_spinner
         spinner?.setOnItemSelectedListener(this)
 
@@ -252,11 +266,29 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val bitmap =
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, contentUri)
                 bitmapImage = bitmap
+                showImage()
             }
         } else if (requestCode == CAMERA) {
             val thumbnail = data?.extras?.get("data")
             bitmapImage = thumbnail as Bitmap
+            showImage()
         }
+    }
+
+    fun showImage() {
+        submit_report.setBackgroundColor(
+            ContextCompat.getColor(
+                this.requireContext(),
+                R.color.orange
+            )
+        )
+        submit_report.isEnabled = true
+        show_loaded_image.visibility=View.VISIBLE
+
+        show_loaded_image.setImageBitmap(bitmapImage)
+
+
+
     }
 
     fun addReport() {
