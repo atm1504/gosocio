@@ -44,8 +44,8 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loginButton.setOnClickListener {
-            val email = email_input.text?.trim().toString()
-            val password = password_input.text?.trim().toString()
+            val email = login_email.text?.trim().toString()
+            val password = login_password.text?.trim().toString()
             val err = 0
 
             if (email.isNullOrBlank() || password.isNullOrBlank()) {
@@ -65,7 +65,7 @@ class LoginFragment : Fragment() {
         val call = retofitApi.login(email, password)
         call.enqueue(object : Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
             }
 
             override fun onResponse(
@@ -97,5 +97,4 @@ class LoginFragment : Fragment() {
 
         })
     }
-
 }

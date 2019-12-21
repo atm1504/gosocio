@@ -34,6 +34,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:id="@+id/move_submit_report"
             android:background="#EEEEEE"
             android:padding="5dp"
             app:cardBackgroundColor="#EEEEEE">
@@ -63,6 +64,7 @@
             android:layout_height="120dp"
             android:background="#EEEEEE"
             android:padding="5dp"
+            android:id="@+id/move_to_reports"
             app:cardBackgroundColor="#EEEEEE">
 
             <LinearLayout
@@ -99,6 +101,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:background="#EEEEEE"
+            android:id="@+id/move_to_profile"
             android:padding="5dp"
             app:cardBackgroundColor="#EEEEEE">
 
@@ -127,6 +130,7 @@
             android:layout_height="120dp"
             android:background="#EEEEEE"
             android:padding="5dp"
+            android:id="@+id/move_to_mygov"
             app:cardBackgroundColor="#EEEEEE">
 
             <LinearLayout
