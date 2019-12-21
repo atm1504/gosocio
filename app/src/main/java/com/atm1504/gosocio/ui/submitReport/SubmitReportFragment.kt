@@ -31,6 +31,7 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var roads: List<String>
     var spinner: Spinner? = null
     var road_selected = ""
+    var complain :String=""
 
     override fun onCreateView(
         inflater: LayoutInflater,
