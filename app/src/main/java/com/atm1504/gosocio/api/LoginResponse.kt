@@ -9,7 +9,13 @@ data class LoginResponse(
     private val email: String = "",
     private val name: String = "",
     private val phone: String = "",
-    private val coins: Number = 0
+    private val coins: Number = 0,
+    private val stick1: Number = 0,
+    private val stick2: Number = 0,
+    private val stick3: Number = 0,
+    private val stick4: Number = 0,
+    private val stick5: Number = 0
+
 ) {
     fun status(): Int {
         return status
