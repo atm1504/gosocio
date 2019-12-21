@@ -88,6 +88,7 @@ class LoginFragment : Fragment() {
                     editor.putInt("stick3", body.stick3.toInt())
                     editor.putInt("stick4", body.stick4.toInt())
                     editor.putInt("stick5", body.stick5.toInt())
+                    editor.putString("access_token", body.access_token())
                     editor.putBoolean("loggedIn",true)
                     editor.commit()
                 }else{

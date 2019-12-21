@@ -2,10 +2,14 @@ package com.atm1504.gosocio.ui.submitReport
 
 import android.Manifest
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.Color.*
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -17,6 +21,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
@@ -51,6 +56,7 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private val GALLERY = 1;
     private val RECORD_REQUEST_CODE = 101
     private lateinit var bitmapImage: Bitmap
+    private val PREFS_NAME = "atm"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,6 +76,14 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         progressDialog = ProgressDialog(context)
         progressDialog?.setCancelable(false)
         locationHelper = LocationHelper(requireContext())
+        submit_report.setBackgroundColor(
+            ContextCompat.getColor(
+                this.requireContext(),
+                R.color.grey
+            )
+        )
+        submit_report.isEnabled = false
+        show_loaded_image.visibility=View.GONE
 
         // Taking permissions
         if (!checkPermissions()) {
@@ -81,8 +95,12 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         getLocation()
 
-        submit_report.setOnClickListener {
+        take_photo.setOnClickListener {
             reportReport()
+        }
+
+        submit_report.setOnClickListener {
+            addReport()
         }
 
     }
@@ -113,7 +131,6 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     // Load the spinner
     fun loadSpinner() {
-        utils.showToast(context, "Worked - " + roads.toString())
         spinner = this.road_spinner
         spinner?.setOnItemSelectedListener(this)
 
@@ -249,18 +266,44 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val bitmap =
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, contentUri)
                 bitmapImage = bitmap
+                showImage()
             }
         } else if (requestCode == CAMERA) {
             val thumbnail = data?.extras?.get("data")
             bitmapImage = thumbnail as Bitmap
+            showImage()
         }
+    }
+
+    fun showImage() {
+        submit_report.setBackgroundColor(
+            ContextCompat.getColor(
+                this.requireContext(),
+                R.color.orange
+            )
+        )
+        submit_report.isEnabled = true
+        show_loaded_image.visibility=View.VISIBLE
+
+        show_loaded_image.setImageBitmap(bitmapImage)
+
+
+
     }
 
     fun addReport() {
         utils.showToast(context, "Image captured")
+        val sharedPref: SharedPreferences =
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val retofitApi = RetrofitApi.create()
-        val email = RequestBody.create(MediaType.parse("text/plain"), "dummy")
-        val access_token = RequestBody.create(MediaType.parse("text/plain"), "yuet78re")
+        val email = RequestBody.create(
+            MediaType.parse("text/plain"),
+            sharedPref.getString("email", "me@atm1504.in ")
+        )
+        val access_token = RequestBody.create(
+            MediaType.parse("text/plain"),
+            sharedPref.getString("access_token", "djhwtuyeftef")
+        )
         val road_name = RequestBody.create(MediaType.parse("text/plain"), road_selected)
         val latitude = RequestBody.create(MediaType.parse("text/plain"), latitude.toString())
         val longitude = RequestBody.create(MediaType.parse("text/plain"), longitude.toString())

@@ -1,6 +1,8 @@
 package com.atm1504.gosocio.ui.SubmittedReports
 
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +31,7 @@ class SubmittedReportsFragment : Fragment() {
     private lateinit var submittedReportsAdapter: SubmittedReportsAdapter
     private lateinit var submittedReportsRecycler: RecyclerView
     private var progressDialog: ProgressDialog? = null
+    private val PREFS_NAME = "atm"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,8 +58,6 @@ class SubmittedReportsFragment : Fragment() {
     }
 
     fun fetchReports() {
-        val dummy_access_token = "retyuecu7fb76b46745376453"
-        val dummy_email = "reuuye@example.com"
 
         progressDialog = ProgressDialog(context)
         progressDialog?.setCancelable(false)
@@ -64,8 +65,16 @@ class SubmittedReportsFragment : Fragment() {
         progressDialog?.show()
 
         val retrofitApi = RetrofitApi.create()
-        val access_token = RequestBody.create(MediaType.parse("text/plain"), dummy_access_token)
-        val email = RequestBody.create(MediaType.parse("text/plain"), dummy_email)
+        val sharedPref: SharedPreferences =
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val email = RequestBody.create(
+            MediaType.parse("text/plain"),
+            sharedPref.getString("email", "me@atm1504.in ")
+        )
+        val access_token = RequestBody.create(
+            MediaType.parse("text/plain"),
+            sharedPref.getString("access_token", "djhwtuyeftef")
+        )
 
         val call = retrofitApi.getReportedTasks(email, access_token)
 
