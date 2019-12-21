@@ -8,25 +8,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
-import com.atm1504.gosocio.api.LoginResponse
 import com.atm1504.gosocio.api.RetrofitApi
 import com.atm1504.gosocio.api.RoadsResponse
 import com.atm1504.gosocio.utils.utils
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import kotlinx.android.synthetic.main.fragment_submit_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SubmitReportFragment : Fragment() {
+class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private lateinit var submitReportViewModel: SubmitReportViewModel
     private var progressDialog: ProgressDialog? = null
     val PERMISSION_ID = 42
+    lateinit var roads: List<String>
+    var spinner: Spinner? = null
+    var road_selected = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +50,12 @@ class SubmitReportFragment : Fragment() {
         progressDialog = ProgressDialog(context)
         progressDialog?.setCancelable(false)
 
-        if(!checkPermissions()){
+        // Taking permissions
+        if (!checkPermissions()) {
             requestPermissions()
         }
 
+        // Fetching roads data
         getRoads()
 
     }
@@ -65,26 +71,41 @@ class SubmitReportFragment : Fragment() {
         val call = retofitApi.getRoads()
         call.enqueue(object : Callback<RoadsResponse> {
             override fun onFailure(call: Call<RoadsResponse>, t: Throwable) {
-                utils.showToast(context,"Something went wrong. Please try again")
+                utils.showToast(context, "Something went wrong. Please try again")
                 progressDialog?.dismiss()
             }
 
             override fun onResponse(call: Call<RoadsResponse>, response: Response<RoadsResponse>) {
-                Log.d("KHANKI","Fetched roads")
+                Log.d("KHANKI", "Fetched roads")
                 progressDialog?.dismiss()
-                loadSpinner(response.body()?.roads)
+                roads = response.body()?.roads as List<String>
+                loadSpinner()
 
             }
-
-
         })
     }
 
-    fun loadSpinner(roads: List<String>?) {
-        utils.showToast(context,"Worked - " + roads.toString())
+    // Load the spinner
+    fun loadSpinner() {
+        utils.showToast(context, "Worked - " + roads.toString())
+        spinner = this.road_spinner
+        spinner?.setOnItemSelectedListener(this)
+
+        // Create an ArrayAdapter using a simple spinner layout and languages array
+        val aa = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, roads) }
+        // Set layout to use when the list of choices appear
+        aa?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Set Adapter to Spinner
+        spinner!!.setAdapter(aa)
     }
 
+    override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
+        road_selected = roads[position]
+    }
 
+    override fun onNothingSelected(arg0: AdapterView<*>) {
+
+    }
 
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
