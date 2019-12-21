@@ -17,7 +17,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
 import com.atm1504.gosocio.api.RetrofitApi
 import com.atm1504.gosocio.api.RoadsResponse
+import com.atm1504.gosocio.utils.LocationHelper
 import com.atm1504.gosocio.utils.utils
+import kotlinx.android.synthetic.main.fragment_report_details.*
 import kotlinx.android.synthetic.main.fragment_submit_report.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +33,9 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var roads: List<String>
     var spinner: Spinner? = null
     var road_selected = ""
-    var complain :String=""
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+    private lateinit var locationHelper: LocationHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -151,6 +155,25 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 ),
                 PERMISSION_ID
             )
+        }
+    }
+
+    fun submitReport(){
+        var complain =write_complain.text
+        if(complain.length<1){
+            utils.showToast(context,"Please write the complain")
+        }else{
+            locationHelper = LocationHelper(requireContext())
+            getLocation()
+
+        }
+    }
+
+    private fun getLocation() {
+        locationHelper.getLocation()
+        if (locationHelper.canGetLocation()) {
+            latitude = locationHelper.latitude
+            longitude = locationHelper.longitude
         }
     }
 
