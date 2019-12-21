@@ -38,34 +38,6 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val retofitApi = RetrofitApi.create()
-//        val email = RequestBody.create(MediaType.parse("text/plain"), "me@atm1504.in")
-//        val password = RequestBody.create(MediaType.parse("text/plain"), "celesta2k19rockz")
-//
-//        val call = retofitApi.login(email, password)
-//        call.enqueue(object : Callback<LoginResponse> {
-//            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-//
-//                Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-//
-//                val status = response.body()?.status()
-//                if (status == 200) {
-//                    Toast.makeText(context, "Successfully Logged in" + response.body()?.access_token().toString(), Toast.LENGTH_SHORT).show()
-////                    findNavController().navigate(R.id.nav_login, null)
-//                } else if (status == 204)
-//                    Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
-//                else if (status == 405)
-//                    Toast.makeText(context, "Method not found", Toast.LENGTH_SHORT).show()
-//                else if (status == 401)
-//                    Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show()
-//                else
-//                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-
         signupButton.setOnClickListener {
             val name = name_input.text?.trim().toString()
             val email = email_input.text?.trim().toString()
@@ -117,14 +89,14 @@ class SignupFragment : Fragment() {
         val call = retofitApi.signup(email,password,name,phone,confirm_password,aadhar)
         call.enqueue(object : Callback<SignupResponse>{
             override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun onResponse(
                 call: Call<SignupResponse>,
                 response: Response<SignupResponse>
             ) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                //To change body of created functions use File | Settings | File Templates.
             }
 
         })
