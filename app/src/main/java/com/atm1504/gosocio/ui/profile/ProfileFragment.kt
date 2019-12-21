@@ -1,5 +1,7 @@
 package com.atm1504.gosocio.ui.profile
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
+    private val PREFS_NAME = "atm"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,9 +32,17 @@ class ProfileFragment : Fragment() {
         setContents()
     }
     fun setContents(){
-        show_name.text="Atreyee Mukherjee"
-        show_email.text="atm1504.in@gmail.com"
-        show_phone.text="8967570983"
-        show_coins.text="1504"
+
+        val sharedPref: SharedPreferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        show_name.text=sharedPref.getString("name","atm")
+        show_email.text=sharedPref.getString("email","me@atm1504.in@gmail.com")
+        show_phone.text=sharedPref.getString("phone","7234634237")
+        show_coins.text=sharedPref.getFloat("coins",0.0F).toString()
+        stick1.text=sharedPref.getInt("stick1",0).toString()
+        stick2.text=sharedPref.getInt("stick2",0).toString()
+        stick3.text=sharedPref.getInt("stick3",0).toString()
+        stick4.text=sharedPref.getInt("stick4",0).toString()
+        stick5.text=sharedPref.getInt("stick5",0).toString()
+
     }
 }
