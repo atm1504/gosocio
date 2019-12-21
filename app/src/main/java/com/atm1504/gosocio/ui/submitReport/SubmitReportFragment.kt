@@ -2,8 +2,12 @@ package com.atm1504.gosocio.ui.submitReport
 
 import android.Manifest
 import android.app.ProgressDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -19,11 +24,11 @@ import com.atm1504.gosocio.api.RetrofitApi
 import com.atm1504.gosocio.api.RoadsResponse
 import com.atm1504.gosocio.utils.LocationHelper
 import com.atm1504.gosocio.utils.utils
-import kotlinx.android.synthetic.main.fragment_report_details.*
 import kotlinx.android.synthetic.main.fragment_submit_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
@@ -36,6 +41,10 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     private lateinit var locationHelper: LocationHelper
+    private val CAMERA = 2;
+    private val GALLERY = 1;
+    private val RECORD_REQUEST_CODE = 101
+    private lateinit var bitmapImage: Bitmap
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +63,7 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         progressDialog = ProgressDialog(context)
         progressDialog?.setCancelable(false)
+        locationHelper = LocationHelper(requireContext())
 
         // Taking permissions
         if (!checkPermissions()) {
@@ -62,6 +72,12 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         // Fetching roads data
         getRoads()
+
+        getLocation()
+
+        submit_report.setOnClickListener {
+            reportReport()
+        }
 
     }
 
@@ -76,7 +92,6 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val call = retofitApi.getRoads()
         call.enqueue(object : Callback<RoadsResponse> {
             override fun onFailure(call: Call<RoadsResponse>, t: Throwable) {
-                utils.showToast(context, "Something went wrong. Please try again")
                 progressDialog?.dismiss()
             }
 
@@ -158,15 +173,20 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    fun submitReport(){
-        var complain =write_complain.text
-        if(complain.length<1){
-            utils.showToast(context,"Please write the complain")
-        }else{
-            locationHelper = LocationHelper(requireContext())
-            getLocation()
+    fun reportReport() {
+        var complain = write_complain.text
+        if (complain.length < 1) {
+            utils.showToast(context, "Please write the complain")
+        } else {
+
+            handleImage()
 
         }
+    }
+
+    fun handleImage() {
+        captureImages()
+
     }
 
     private fun getLocation() {
@@ -175,6 +195,57 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
             latitude = locationHelper.latitude
             longitude = locationHelper.longitude
         }
+    }
+
+    private fun captureImages() {
+        val pictureDialog = AlertDialog.Builder(requireContext())
+        pictureDialog.setTitle(getString(R.string.select_image))
+        pictureDialog.setMessage(getString(R.string.photo_road))
+        pictureDialog.setPositiveButton(
+            getString(R.string.gallery),
+            DialogInterface.OnClickListener { dialog, which -> choosePhotoFromGallery() }
+        )
+
+        pictureDialog.setNegativeButton(
+            getString(R.string.camera),
+            DialogInterface.OnClickListener { dialog, which ->
+                // If user click no
+                // then dialog box is canceled.
+                getPhotoFromCamera()
+            })
+
+        val alertDialog = pictureDialog.create()
+        alertDialog.show()
+    }
+
+    private fun getPhotoFromCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, CAMERA)
+    }
+
+    private fun choosePhotoFromGallery() {
+        val galIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galIntent, GALLERY)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                val contentUri = data.data
+                val bitmap =
+                    MediaStore.Images.Media.getBitmap(activity?.contentResolver, contentUri)
+                bitmapImage = bitmap
+            }
+        } else if (requestCode == CAMERA) {
+            val thumbnail = data?.extras?.get("data")
+            bitmapImage = thumbnail as Bitmap
+        }
+    }
+
+    fun addReport(){
+        utils.showToast(context,"Image captured")
     }
 
 }
