@@ -38,6 +38,16 @@ interface RetrofitApi {
     @GET("roads.json")
     fun getRoads(): Call<RoadsResponse>
 
+    @Multipart
+    @POST("submitReport")
+    fun submitReport(
+        @Part("email") email: RequestBody, @Part("access_token") access_token: RequestBody, @Part("complain") complain: RequestBody, @Part(
+            "road_name"
+        ) road_name: RequestBody, @Part("latitude") latitude: RequestBody, @Part("longitude") longitude: RequestBody, @Part(
+            "is_at_site"
+        ) is_at_site: RequestBody, @Part("image") image: RequestBody
+    ): Call<SubmitReportResponse>
+
     companion object Factory {
         fun create(): RetrofitApi {
             val retrofit = Retrofit.Builder()

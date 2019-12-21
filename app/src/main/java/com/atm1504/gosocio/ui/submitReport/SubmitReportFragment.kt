@@ -20,11 +20,15 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
+import com.atm1504.gosocio.api.LoginResponse
 import com.atm1504.gosocio.api.RetrofitApi
 import com.atm1504.gosocio.api.RoadsResponse
+import com.atm1504.gosocio.api.SubmitReportResponse
 import com.atm1504.gosocio.utils.LocationHelper
 import com.atm1504.gosocio.utils.utils
 import kotlinx.android.synthetic.main.fragment_submit_report.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +43,9 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
     var spinner: Spinner? = null
     var road_selected = ""
     var latitude: Double = 0.0
+    var is_at_site = 1
     var longitude: Double = 0.0
+    var complain = ""
     private lateinit var locationHelper: LocationHelper
     private val CAMERA = 2;
     private val GALLERY = 1;
@@ -116,7 +122,7 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         // Set layout to use when the list of choices appear
         aa?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
-        spinner!!.setAdapter(aa)
+        spinner?.setAdapter(aa)
     }
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
@@ -178,6 +184,12 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (complain.length < 1) {
             utils.showToast(context, "Please write the complain")
         } else {
+
+            if (is_at_location.isChecked) {
+                is_at_site = 1
+            } else {
+                is_at_site = 0
+            }
 
             handleImage()
 
@@ -244,8 +256,42 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    fun addReport(){
-        utils.showToast(context,"Image captured")
+    fun addReport() {
+        utils.showToast(context, "Image captured")
+        val retofitApi = RetrofitApi.create()
+        val email = RequestBody.create(MediaType.parse("text/plain"), "dummy")
+        val access_token = RequestBody.create(MediaType.parse("text/plain"), "yuet78re")
+        val road_name = RequestBody.create(MediaType.parse("text/plain"), road_selected)
+        val latitude = RequestBody.create(MediaType.parse("text/plain"), latitude.toString())
+        val longitude = RequestBody.create(MediaType.parse("text/plain"), longitude.toString())
+        val at_site = RequestBody.create(MediaType.parse("text/plain"), is_at_site.toString())
+        val image = RequestBody.create(MediaType.parse("text/plain"), bitmapImage.toString())
+        val complain = RequestBody.create(MediaType.parse("text/plain"), complain)
+
+        val call = retofitApi.submitReport(
+            email,
+            access_token,
+            complain,
+            road_name,
+            latitude,
+            longitude,
+            at_site,
+            image
+        )
+        call.enqueue(object : Callback<SubmitReportResponse> {
+            override fun onFailure(call: Call<SubmitReportResponse>, t: Throwable) {
+                Log.d("KHANKI", "Failed to fetch data")
+            }
+
+            override fun onResponse(
+                call: Call<SubmitReportResponse>,
+                response: Response<SubmitReportResponse>
+            ) {
+                utils.showToast(context, "Submittted report")
+            }
+
+
+        })
     }
 
 }
