@@ -2,8 +2,10 @@ package com.atm1504.gosocio.ui.submitReport
 
 import android.Manifest
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -51,6 +53,7 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private val GALLERY = 1;
     private val RECORD_REQUEST_CODE = 101
     private lateinit var bitmapImage: Bitmap
+    private val PREFS_NAME = "atm"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -258,9 +261,17 @@ class SubmitReportFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     fun addReport() {
         utils.showToast(context, "Image captured")
+        val sharedPref: SharedPreferences =
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val retofitApi = RetrofitApi.create()
-        val email = RequestBody.create(MediaType.parse("text/plain"), "dummy")
-        val access_token = RequestBody.create(MediaType.parse("text/plain"), "yuet78re")
+        val email = RequestBody.create(
+            MediaType.parse("text/plain"),
+            sharedPref.getString("email", "me@atm1504.in ")
+        )
+        val access_token = RequestBody.create(
+            MediaType.parse("text/plain"),
+            sharedPref.getString("access_token", "djhwtuyeftef")
+        )
         val road_name = RequestBody.create(MediaType.parse("text/plain"), road_selected)
         val latitude = RequestBody.create(MediaType.parse("text/plain"), latitude.toString())
         val longitude = RequestBody.create(MediaType.parse("text/plain"), longitude.toString())
