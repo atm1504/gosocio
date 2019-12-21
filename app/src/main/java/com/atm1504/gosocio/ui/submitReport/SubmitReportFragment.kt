@@ -1,26 +1,31 @@
 package com.atm1504.gosocio.ui.submitReport
 
 import android.Manifest
-import android.content.Context
+import android.app.ProgressDialog
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.atm1504.gosocio.R
+import com.atm1504.gosocio.api.LoginResponse
+import com.atm1504.gosocio.api.RetrofitApi
+import com.atm1504.gosocio.api.RoadsResponse
+import com.atm1504.gosocio.utils.utils
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SubmitReportFragment : Fragment() {
 
     private lateinit var submitReportViewModel: SubmitReportViewModel
+    private var progressDialog: ProgressDialog? = null
     val PERMISSION_ID = 42
 
     override fun onCreateView(
@@ -30,7 +35,7 @@ class SubmitReportFragment : Fragment() {
     ): View? {
         submitReportViewModel =
             ViewModelProviders.of(this).get(SubmitReportViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_share, container, false)
+        val root = inflater.inflate(R.layout.fragment_submit_report, container, false)
 
         return root
     }
@@ -38,11 +43,47 @@ class SubmitReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        progressDialog = ProgressDialog(context)
+        progressDialog?.setCancelable(false)
+
         if(!checkPermissions()){
             requestPermissions()
         }
 
+        getRoads()
+
     }
+
+    // Function to fetch the list of roads
+    private fun getRoads() {
+
+        progressDialog?.setMessage("Getting roads...")
+        progressDialog?.show()
+
+        val retofitApi = RetrofitApi.create()
+
+        val call = retofitApi.getRoads()
+        call.enqueue(object : Callback<RoadsResponse> {
+            override fun onFailure(call: Call<RoadsResponse>, t: Throwable) {
+                utils.showToast(context,"Something went wrong. Please try again")
+                progressDialog?.dismiss()
+            }
+
+            override fun onResponse(call: Call<RoadsResponse>, response: Response<RoadsResponse>) {
+                Log.d("KHANKI","Fetched roads")
+                progressDialog?.dismiss()
+                loadSpinner(response.body()?.roads)
+
+            }
+
+
+        })
+    }
+
+    fun loadSpinner(roads: List<String>?) {
+        utils.showToast(context,"Worked - " + roads.toString())
+    }
+
 
 
     private fun checkPermissions(): Boolean {

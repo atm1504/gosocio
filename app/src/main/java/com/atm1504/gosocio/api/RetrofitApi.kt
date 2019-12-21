@@ -35,6 +35,9 @@ interface RetrofitApi {
         @Part("email") email: RequestBody, @Part("access_token") access_token: RequestBody, @Part("id") id: RequestBody
     ): Call<ReportResponse>
 
+    @GET("roads.json")
+    fun getRoads(): Call<RoadsResponse>
+
     companion object Factory {
         fun create(): RetrofitApi {
             val retrofit = Retrofit.Builder()
